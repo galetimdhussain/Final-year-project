@@ -18,3 +18,4 @@ model processes these enriched features to model temporal dependencies and forec
 electricity prices. By combining deep feature extraction with sequential learning, the proposed 
 framework achieves enhanced prediction accuracy and robustness compared to traditional 
 statistical and standalone machine learning models.
+.
