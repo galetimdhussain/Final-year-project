@@ -1,0 +1,311 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>HYBRID APPROACH FOR ELECTRICITY PRICE FORECASTING USING ALEXNET AND LSTM</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link href="{% static 'layout/styles/layout.css' %}" rel="stylesheet" type="text/css" media="all">
+<style>
+body, html {
+margin: 0;
+padding: 0;
+height: 100%;
+font-family: Arial, sans-serif;
+}
+.bgded {
+background-image: url('{% static "images/01.jpg" %}');
+background-size: cover;
+background-position: center;
+height: 100%;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+text-align: center;
+}
+h3 {
+font-size: 2.5rem;
+color: white;
+text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+margin-bottom: 30px;
+line-height: 1.4;
+max-width: 90%;
+}
+form {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 15px;
+}
+.input100 {
+width: 300px;
+padding: 10px;
+margin: 10px 0;
+border: 1px solid #ccc;
+border-radius: 5px;
+font-size: 16px;
+background: white;
+color: black;
+}
+.btn {
+background-color: #007bff;
+color: white;
+padding: 10px 20px;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+font-size: 16px;
+margin-top: 10px;
+}
+.btn:hover {
+background-color: #0056b3;
+}
+.view-password {
+cursor: pointer;
+color: #007bff;
+font-size: 14px;
+text-decoration: underline;
+margin-top: -5px;
+}
+</style>
+</head>
+<body>
+<div class="bgded">
+<h3>
+HYBRID APPROACH FOR ELECTRICITY PRICE FORECASTING USING ALEXNET AND LSTM
+</h3>
+<form action="input" method="POST" enctype="multipart/form-data" class="login100-form validate-form">
+{% csrf_token %}
+<input class="input100" type="text" name="name" placeholder="Name" required>
+<div style="position: relative;">
+<input class="input100" id="password" type="password" name="password" placeholder="Password" required>
+<span class="view-password" id="viewPassword" onclick="togglePassword()">View</span>
+</div>
+<button type="submit" class="btn">LOGIN</button>
+</form>
+</div>
+<script src="{% static 'layout/scripts/jquery.min.js' %}"></script>
+<script src="{% static 'layout/scripts/jquery.backtotop.js' %}"></script>
+<script src="{% static 'layout/scripts/jquery.mobilemenu.js' %}"></script>
+<script>
+function togglePassword() {
+var passwordField = document.getElementById('password');
+var viewPasswordButton = document.getElementById('viewPassword');
+passwordField.type = 'text';
+viewPasswordButton.innerText = 'Hide';
+setTimeout(function() {
+passwordField.type = 'password';
+viewPasswordButton.innerText = 'View';
+}, 5000);
+}
+</script>
+</body>
+</html>
+```
+
+### 7. Input.html
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Electricity Price Prediction</title>
+<style>
+body {
+font-family: Arial, sans-serif;
+background: url('{% static "images/02.jpg" %}') no-repeat center center fixed; 
+background-size: cover;
+color: #fff;
+display: flex;
+justify-content: center;
+align-items: center;
+height: 150vh;
+margin: 0;
+}
+.container {
+background: rgba(0, 0, 0, 0.8);
+padding: 25px;
+border-radius: 10px;
+width: 400px;
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+h2 {
+text-align: center;
+margin-bottom: 20px;
+font-size: 22px;
+}
+label {
+font-weight: bold;
+display: block;
+margin-top: 10px;
+}
+input, select {
+width: 100%;
+padding: 10px;
+margin-top: 5px;
+border: none;
+border-radius: 5px;
+font-size: 16px;
+}
+input[type="number"], select {
+background: #ecf0f1;
+color: #333;
+}
+input[type="submit"] {
+background: #27ae60;
+color: white;
+font-weight: bold;
+cursor: pointer;
+margin-top: 15px;
+border: none;
+padding: 12px;
+}
+input[type="submit"]:hover {
+background: #2ecc71;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Enter the Data</h2>
+<form action="{% url 'output' %}" method="post">
+{% csrf_token %}
+<label for="demand">Demand:</label>
+<input type="number" step="any" name="demand" required>
+<label for="demand_pos_RRP">Demand Positive RRP:</label>
+<input type="number" step="any" name="demand_pos_RRP" required>
+<label for="RRP_positive">RRP Positive:</label>
+<input type="number" step="any" name="RRP_positive" required>
+<label for="demand_neg_RRP">Demand Negative RRP:</label>
+<input type="number" step="any" name="demand_neg_RRP" required>
+<label for="RRP_negative">RRP Negative:</label>
+<input type="number" step="any" name="RRP_negative" required>
+<label for="frac_at_neg_RRP">Fraction at Negative RRP:</label>
+<input type="number" step="any" name="frac_at_neg_RRP" required>
+<label for="min_temperature">Minimum Temperature:</label>
+<input type="number" step="any" name="min_temperature" required>
+<label for="max_temperature">Maximum Temperature:</label>
+<input type="number" step="any" name="max_temperature" required>
+<label for="solar_exposure">Solar Exposure:</label>
+<input type="number" step="any" name="solar_exposure" value="0">
+<label for="rainfall">Rainfall:</label>
+<input type="number" step="any" name="rainfall" value="0">
+<label for="school_day">School Day:</label>
+<select name="school_day">
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select>
+<label for="holiday">Holiday:</label>
+<select name="holiday">
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select>
+<label for="algo">Select Algorithm:</label>
+<select name="algo">
+<option value="Hybrid">Hybrid</option>
+<option value="RNN">RNN</option>
+<option value="ANN">ANN</option>
+</select>
+<input type="submit" value="Predict">
+</form>
+</div>
+</body>
+</html>
+```
+
+### 8. output.html
+```html
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+<title>Electric Price Prediction Using Deep Learning</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link href="{% static 'layout/styles/layout.css' %}" rel="stylesheet" type="text/css" media="all">
+<style>
+.bgded {
+background-image: url('{% static "images/03.avif" %}');
+background-size: cover;
+background-position: center;
+background-attachment: fixed;
+height: 100vh;
+margin: 0;
+display: flex;
+justify-content: center;
+align-items: center;
+text-align: center;
+}
+#pageintro {
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+width: 100%;
+}
+.heading {
+font-size: 3rem;
+text-transform: uppercase;
+font-weight: bold;
+letter-spacing: 2px;
+text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+color: white;
+}
+.btn {
+width: 280px;
+height: 85px;
+background: linear-gradient(45deg, #ffeb3b, #fdd835);
+color: black;
+font-size: 28px;
+font-weight: bold;
+text-align: center;
+line-height: 85px;
+border-radius: 12px;
+border: none;
+display: inline-block;
+cursor: pointer;
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+box-shadow: 0px 5px 15px rgba(255, 235, 59, 0.5);
+animation: fadeIn 1s ease-in-out;
+}
+.btn:hover {
+transform: scale(1.05);
+box-shadow: 0px 8px 20px rgba(255, 235, 59, 0.7);
+}
+@keyframes fadeIn {
+from {
+opacity: 0;
+transform: translateY(-10px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+</style>
+</head>
+<body id="top">
+<div class="bgded"> 
+<div id="pageintro"> 
+<article>
+<h3 class="heading">Predicted Electric Price</h3>
+<footer>
+<a class="btn">
+{% if out %}
+{% if out|length > 0 %}
+₹{{ out.0 }}
+{% else %}
+No prediction available
+{% endif %}
+{% else %}
+No prediction available
+{% endif %}
+</a>
+</footer>
+</article>
+</div>
+</div>
+</body>
+</html>
+
